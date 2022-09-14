@@ -1,7 +1,7 @@
 let mapleader = "/"
 
 set number
-" set relativenumber
+set relativenumber
 set autoindent
 set tabstop=2
 set shiftwidth=2
@@ -16,7 +16,6 @@ set nowritebackup
 set updatetime=300
 " set mouse=a
 
-
 call plug#begin("~/.vim/plugged")
   " Plugin Section
   Plug 'rafi/awesome-vim-colorschemes'
@@ -29,11 +28,13 @@ call plug#begin("~/.vim/plugged")
   Plug 'tc50cal/vim-terminal'
   Plug 'terryma/vim-multiple-cursors'
   Plug 'ryanoasis/vim-devicons'
-  Plug 'neoclide/coc.nvim'
   Plug 'nvim-lua/plenary.nvim'
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
   Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.0' }
   Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
+  Plug 'wellle/context.vim'
   Plug 'neovim/nvim-lspconfig'
+  Plug 'f-person/git-blame.nvim'
 call plug#end()
 
 
@@ -67,6 +68,8 @@ nnoremap <A-h> <C-w>h
 nnoremap <A-j> <C-w>j
 nnoremap <A-k> <C-w>k
 nnoremap <A-l> <C-w>l
+nnoremap <esc> :noh<return><esc>
+nnoremap <esc>^[ <esc>^[
 
 " Create Blank Newlines and stay in Normal mode
 nnoremap <silent> <leader>o o<Esc>
@@ -93,6 +96,7 @@ nmap <silent> gr <Plug>(coc-references)
 " Symbol renaming.
 map <leader>rn <Plug>(coc-rename)
 nmap <silent><c-s> :CocActionAsync('showSignatureHelp')<CR>
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
 
 
 " Telescope Config
