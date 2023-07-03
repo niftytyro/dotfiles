@@ -136,12 +136,5 @@ require'telescope'.setup({
         file_ignore_patterns = { "^./.git/", "^node_modules/", "^vendor/" },
     }
 })
-require("flutter-tools").setup({
-    lsp = {
-      settings = {
-        enableSnippets = true,
-      }
-    }
-})
 EOF
 
