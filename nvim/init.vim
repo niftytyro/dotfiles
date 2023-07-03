@@ -18,6 +18,9 @@ set updatetime=300
 
 call plug#begin("~/.vim/plugged")
   " Plugin Section
+  Plug 'dense-analysis/ale'
+  Plug 'shaunsingh/nord.nvim'
+  Plug 'joshdick/onedark.vim'
   Plug 'rafi/awesome-vim-colorschemes'
   Plug 'vim-airline/vim-airline'
   Plug 'scrooloose/nerdtree'
@@ -32,9 +35,14 @@ call plug#begin("~/.vim/plugged")
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
   Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.0' }
   Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
-  Plug 'wellle/context.vim'
   Plug 'neovim/nvim-lspconfig'
+  Plug 'madox2/vim-ai'
   Plug 'f-person/git-blame.nvim'
+  "Dart/Flutter
+  Plug 'dart-lang/dart-vim-plugin'
+  Plug 'thosakwe/vim-flutter'
+  Plug 'natebosch/vim-lsc'
+  Plug 'natebosch/vim-lsc-dart'
 call plug#end()
 
 
@@ -44,7 +52,10 @@ if (has("termguicolors"))
 endif
 
 syntax enable
-colorscheme oceanicnext
+colorscheme onedark
+let g:airline_theme='onedark'
+let g:onedark_hide_endofbuffer=1
+let g:onedark_terminal_italics=1
 
 
 " NERDTree Config
@@ -57,7 +68,6 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 " Toggle
 nnoremap <silent> <c-v> :NERDTreeToggle<CR>
 nmap <silent><c-c> :NERDTreeFind<CR>
-
 
 " use alt+hjkl to move between split/vsplit panels
 tnoremap <A-h> <C-\><C-n><C-w>h
@@ -75,7 +85,6 @@ nnoremap <esc>^[ <esc>^[
 nnoremap <silent> <leader>o o<Esc>
 nnoremap <silent> <leader>O O<Esc>
 
-
 " CoC Config
 let g:coc_global_extensions = [
   \ 'coc-snippets',
@@ -86,6 +95,19 @@ let g:coc_global_extensions = [
   \ 'coc-json',
   \ ]
  
+let g:ale_linters = {
+    \ 'cpp': ['clang'],
+    \ 'c': ['clang']
+\}
+
+" custom setting for clangformat
+let g:neoformat_cpp_clangformat = {
+    \ 'exe': 'clang-format',
+    \ 'args': ['--style="{IndentWidth: 4}"']
+\}
+let g:neoformat_enabled_cpp = ['clangformat']
+let g:neoformat_enabled_c = ['clangformat']
+
 inoremap <silent><expr> <c-space> coc#refresh()
 " Goto Definition
 nmap <silent> gd <Plug>(coc-definition)
@@ -108,13 +130,18 @@ nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<cr>
 " Auto-detect astro files
 au! BufRead,BufNewFile *.astro set filetype=astro
 
-
 lua << EOF
 require'telescope'.setup({
     defaults = {
         file_ignore_patterns = { "^./.git/", "^node_modules/", "^vendor/" },
     }
 })
-require'lspconfig'.astro.setup{}
+require("flutter-tools").setup({
+    lsp = {
+      settings = {
+        enableSnippets = true,
+      }
+    }
+})
 EOF
 
